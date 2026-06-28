@@ -1,0 +1,250 @@
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import { useAuth } from '../context/AuthContext';
+import { useNotices } from '../context/NoticesContext';
+import { CATEGORIES } from '../data/notices';
+import './AdminPage.css';
+
+const COURSES = ['BCA', 'B.Sc', 'BBA', 'B.Com', 'B.A', 'M.Sc', 'MCA', 'MBA', 'M.A'];
+const YEARS = ['1', '2', '3'];
+
+const emptyForm = {
+  title: '', content: '',
+  category: 'academics', source: '',
+  targetCourse: 'ALL', targetYear: 'ALL',
+};
+
+function StudentView({ notices, currentUser }) {
+  return (
+    <main className="admin-page">
+      <div className="admin-header">
+        <div>
+          <h1>My Notices</h1>
+          <p className="admin-subtitle">Welcome, {currentUser?.name || currentUser?.email}</p>
+        </div>
+      </div>
+
+      <div className="student-notices">
+        {notices.length === 0 ? (
+          <div className="admin-empty">No notices posted yet</div>
+        ) : (
+          <ul className="admin-notice-list">
+            {notices.map((n) => (
+              <li key={n.id} className={`admin-notice-row admin-notice-row--${n.category}`}>
+                <div>
+                  <span className="admin-notice-category">{n.category}</span>
+                  <p className="admin-notice-title">{n.title}</p>
+                </div>
+                <span className="admin-notice-date">
+                  {new Date(n.createdAt).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </main>
+  );
+}
+
+function AdminView({ notices, currentUser, logout }) {
+  const { addNotice, deleteNotice } = useNotices();
+  const [form, setForm] = useState(emptyForm);
+  const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.title.trim() || !form.content.trim()) {
+      setErrorMsg('Title and content are required.');
+      setStatus('error');
+      return;
+    }
+    setStatus('loading');
+    setErrorMsg('');
+    try {
+      const result = await addNotice({
+        title: form.title,
+        content: form.content,
+        category: form.category,
+        targetCourse: form.targetCourse,
+        targetDepartment: 'ALL',
+        targetYear: form.targetYear,
+      });
+      if (result?.id) {
+        setForm(emptyForm);
+        setStatus('success');
+        setTimeout(() => setStatus(null), 2500);
+      } else {
+        throw new Error(result?.error || 'Failed to publish');
+      }
+    } catch (err) {
+      setErrorMsg(err.message);
+      setStatus('error');
+    }
+  };
+
+  const counts = CATEGORIES.reduce((acc, c) => {
+    acc[c.key] = notices.filter((n) => n.category === c.key).length;
+    return acc;
+  }, {});
+
+  const analyticsCards = [
+    { label: 'Total',      value: notices.length,        mod: 'purple' },
+    { label: 'Exams',      value: counts.exams     ?? 0, mod: 'orange' },
+    { label: 'Events',     value: counts.events    ?? 0, mod: 'green'  },
+    { label: 'Placements', value: counts.placements ?? 0, mod: 'blue'  },
+  ];
+
+  return (
+    <main className="admin-page">
+      <div className="admin-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p className="admin-subtitle">
+            Signed in as {currentUser?.name || currentUser?.email}
+          </p>
+        </div>
+        <button className="admin-logout" onClick={logout}>Log out</button>
+      </div>
+
+      <div className="admin-analytics">
+        {analyticsCards.map((a) => (
+          <div key={a.label} className={`analytics-card analytics-card--${a.mod}`}>
+            <span className="label">{a.label}</span>
+            <span className="value">{a.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="admin-layout">
+
+        {/* Post form */}
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <h2>Post a new notice</h2>
+
+          {status === 'success' && <div className="admin-success">✅ Notice published!</div>}
+          {status === 'error' && <div className="admin-error">❌ {errorMsg}</div>}
+
+          <label className="admin-field">
+            <span>Title</span>
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Notice title"
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Category</span>
+            <select name="category" value={form.category} onChange={handleChange}>
+              {CATEGORIES.map((c) => (
+                <option key={c.key} value={c.key}>{c.label}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="admin-field">
+            <span>Content</span>
+            <textarea
+              name="content"
+              value={form.content}
+              onChange={handleChange}
+              placeholder="Full notice text — dates, venue, links, contacts..."
+              rows={7}
+            />
+          </label>
+
+          <div className="admin-row">
+            <label className="admin-field">
+              <span>Target course</span>
+              <select name="targetCourse" value={form.targetCourse} onChange={handleChange}>
+                <option value="ALL">All courses</option>
+                {COURSES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </label>
+
+            <label className="admin-field">
+              <span>Target year</span>
+              <select name="targetYear" value={form.targetYear} onChange={handleChange}>
+                <option value="ALL">All years</option>
+                {YEARS.map((y) => (
+                  <option key={y} value={y}>Year {y}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            className="admin-submit"
+            disabled={status === 'loading'}
+          >
+            {status === 'loading' ? 'Publishing...' : 'Publish notice'}
+          </button>
+        </form>
+
+        {/* Notice list */}
+        <div className="admin-list">
+          <h2>All notices ({notices.length})</h2>
+          {notices.length === 0 ? (
+            <div className="admin-empty">No notices posted yet</div>
+          ) : (
+            <ul className="admin-notice-list">
+              {notices.map((n) => (
+                <li key={n.id} className={`admin-notice-row admin-notice-row--${n.category}`}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <span className="admin-notice-category">{n.category}</span>
+                    <p className="admin-notice-title">{n.title}</p>
+                    <p className="admin-notice-audience">
+                      {n.targetCourse !== 'ALL'
+                        ? `🎯 ${n.targetCourse}${n.targetYear !== 'ALL' ? ` · Year ${n.targetYear}` : ''}`
+                        : '👥 Everyone'}
+                    </p>
+                    <p className="admin-notice-date">
+                      {new Date(n.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="admin-delete"
+                    onClick={() => deleteNotice(n.id)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+      </div>
+    </main>
+  );
+}
+
+function AdminPage() {
+  const { currentUser, logout } = useAuth();
+  const { notices } = useNotices();
+
+  const isAdmin = ['admin', 'cr', 'event_manager'].includes(currentUser?.role);
+
+  return (
+    <>
+      <Navbar />
+      {isAdmin
+        ? <AdminView notices={notices} currentUser={currentUser} logout={logout} />
+        : <StudentView notices={notices} currentUser={currentUser} />
+      }
+    </>
+  );
+}
+
+export default AdminPage;

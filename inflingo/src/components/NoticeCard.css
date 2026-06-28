@@ -1,0 +1,148 @@
+.notice-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 56px 16px 20px;
+  border: 0.5px solid #e8eaf6;
+  border-left-width: 3px;
+  border-left-color: #e8eaf6;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notice-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+/* ── LEFT ACCENT ── */
+.notice-card--academics   { border-left-color: #6366f1; }
+.notice-card--exams       { border-left-color: #f59e0b; }
+.notice-card--events      { border-left-color: #10b981; }
+.notice-card--placements  { border-left-color: #3b82f6; }
+.notice-card--general     { border-left-color: #f43f5e; }
+.notice-card--sports      { border-left-color: #06b6d4; }
+.notice-card--scholarships{ border-left-color: #eab308; }
+.notice-card--lost-found  { border-left-color: #a855f7; }
+
+/* ── BOOKMARK ── */
+.notice-card-bookmark {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.notice-card-bookmark:hover {
+  background: #ede9fe;
+  color: #6366f1;
+}
+
+.notice-card-bookmark--active {
+  background: #6366f1;
+  color: #fff;
+}
+
+.notice-card-bookmark svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── META ── */
+.notice-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.notice-card-category {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.notice-card--academics  .notice-card-category { background: #ede9fe; color: #4f46e5; }
+.notice-card--exams      .notice-card-category { background: #fef3c7; color: #d97706; }
+.notice-card--events     .notice-card-category { background: #dcfce7; color: #16a34a; }
+.notice-card--placements .notice-card-category { background: #dbeafe; color: #1d4ed8; }
+.notice-card--general    .notice-card-category { background: #ffe4e6; color: #e11d48; }
+.notice-card--sports     .notice-card-category { background: #cffafe; color: #0e7490; }
+.notice-card--scholarships .notice-card-category { background: #fef9c3; color: #a16207; }
+.notice-card--lost-found .notice-card-category { background: #f3e8ff; color: #7e22ce; }
+
+.notice-card-date {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ── TITLE & EXCERPT ── */
+.notice-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.notice-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+.notice-card-link:hover .notice-card-title {
+  color: #4f46e5;
+}
+
+.notice-card-excerpt {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── FOOTER ── */
+.notice-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 0.5px solid #f1f5f9;
+}
+
+.notice-card-source {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.notice-card-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #eef2ff;
+  color: #4f46e5;
+  border: 0.5px solid #c7d2fe;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .notice-card { padding: 16px 48px 14px 16px; }
+  .notice-card-title { font-size: 0.9rem; }
+}

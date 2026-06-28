@@ -1,0 +1,218 @@
+/* ── TOKENS ───────────────────────────────────────── */
+:root {
+  --nav-height: 64px;
+  --nav-bg: #ffffff;
+  --nav-border: #e5e7eb;
+  --nav-active: #4f46e5;
+  --nav-cta-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --nav-cta-hover: #4338ca;
+}
+
+/* ── SHELL ────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+}
+
+.navbar-inner {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* ── LOGO ─────────────────────────────────────────── */
+.navbar-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* the gradient square mark */
+.navbar-logo-icon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  flex-shrink: 0;
+}
+
+.navbar-logo-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+  stroke: #fff;
+}
+
+/* red notification dot */
+.navbar-logo-icon::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  background: #f43f5e;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* text stack */
+.navbar-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 2px;
+}
+
+.navbar-logo-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-logo-sub {
+  font-size: 9px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── NAV LINKS ────────────────────────────────────── */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navbar-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.navbar-link:hover {
+  color: #1e293b;
+  background: #f8f9ff;
+}
+
+.navbar-link--active {
+  color: #4f46e5;
+  background: #eef2ff;
+  font-weight: 600;
+}
+
+/* ── ACTIONS ──────────────────────────────────────── */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.navbar-cta {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.navbar-cta:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ── HAMBURGER ────────────────────────────────────── */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.navbar-toggle:hover { background: #f1f5f9; }
+
+.navbar-toggle span {
+  width: 20px;
+  height: 2px;
+  background: #374151;
+  border-radius: 2px;
+  display: block;
+}
+
+/* ── MOBILE ───────────────────────────────────────── */
+@media (max-width: 760px) {
+  .navbar-links {
+    position: absolute;
+    top: var(--nav-height);
+    left: 0; right: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--nav-border);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .navbar-links--open { max-height: 320px; }
+
+  .navbar-link {
+    padding: 14px 20px;
+    border-radius: 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+  }
+
+  .navbar-link--active {
+    background: #f5f3ff;
+    border-left: 3px solid var(--nav-active);
+  }
+
+  .navbar-cta { display: none; }
+  .navbar-toggle { display: flex; }
+}

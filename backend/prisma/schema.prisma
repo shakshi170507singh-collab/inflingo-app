@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String      @unique
+  password     String
+  role         String      @default("student")
+  course       String
+  department   String
+  year         Int
+  createdAt    DateTime    @default(now())
+  notices      Notice[]
+  crRequests   CRRequest[]
+}
+
+model Notice {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  content          String
+  category         String
+  targetCourse     String   @default("ALL")
+  targetDepartment String   @default("ALL")
+  targetYear       String   @default("ALL")
+  authorId         String   @db.ObjectId
+  author           User     @relation(fields: [authorId], references: [id])
+  createdAt        DateTime @default(now())
+}
+
+model CRRequest {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,202 @@
+/* ── PAGE ───────────────────────────────────────────────── */
+.category-page {
+  min-height: 100vh;
+  background: #f8f9ff;
+  padding: 36px 20px 80px;
+  font-family: var(--font-body);
+}
+
+.category-page-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── BACK LINK ──────────────────────────────────────────── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 8px;
+  background: transparent;
+  transition: background 0.15s, color 0.15s, gap 0.15s;
+}
+
+.back-link:hover {
+  color: #4f46e5;
+  background: #eef2ff;
+  gap: 10px;
+}
+
+/* ── HEADER CARD ────────────────────────────────────────── */
+.category-page-header {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid #e8eaf6;
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.06);
+  /* Colored left accent that communicates category at a glance */
+  border-left: 4px solid #4f46e5;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background shimmer — keeps it lively without noise */
+.category-page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #eef2ff 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Per-category accent colours on the left border */
+.category-page-header--academics { border-left-color: #6366f1; }
+.category-page-header--exams     { border-left-color: #f59e0b; }
+.category-page-header--events    { border-left-color: #10b981; }
+.category-page-header--placements{ border-left-color: #3b82f6; }
+.category-page-header--general{ border-left-color: #c42756; }
+
+
+
+
+.category-page-eyebrow {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a5b4fc;
+  margin-bottom: 4px;
+}
+
+.category-page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-family: var(--font-heading);
+  color: #1e293b;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.category-page-count {
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  border: 1px solid #c7d2fe;
+}
+
+/* ── TABS ───────────────────────────────────────────────── */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 4px 0;
+}
+
+.category-tab {
+  text-decoration: none;
+  color: #64748b;
+  background: #fff;
+  padding: 9px 20px;
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1.5px solid #e2e8f0;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+  line-height: 1;
+}
+
+.category-tab:hover {
+  border-color: #a5b4fc;
+  color: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+}
+
+.category-tab.active {
+  background: #4f46e5;
+  color: #fff;
+  border-color: #4f46e5;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ── NOTICES GRID ───────────────────────────────────────── */
+.notices-grid {
+  display: grid;
+  gap: 16px;
+}
+
+/* ── EMPTY STATE ────────────────────────────────────────── */
+.empty-state {
+  background: #fff;
+  border-radius: 16px;
+  padding: 64px 40px;
+  text-align: center;
+  border: 1.5px dashed #c7d2fe;
+  /* Dashed border signals "nothing here yet" more clearly than a solid card */
+}
+
+.empty-state span {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+  opacity: 0.8;
+}
+
+.empty-state p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .category-page {
+    padding: 24px 16px 56px;
+  }
+
+  .category-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px 20px 20px 24px;
+  }
+
+  .category-page-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .category-tabs {
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .category-tab {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+  }
+
+  .empty-state {
+    padding: 48px 24px;
+  }
+}

@@ -1,0 +1,397 @@
+/* ── Page shell ── */
+.admin-page {
+  min-height: 100vh;
+  background: #f8f7ff;
+  padding: 24px 20px 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+  border-radius: 20px;
+  color: white;
+}
+
+.admin-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 4px 0;
+}
+
+.admin-subtitle {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.admin-logout {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+
+.admin-logout:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ── Analytics cards ── */
+.admin-analytics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.analytics-card {
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.analytics-card::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+
+.analytics-card .label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.analytics-card .value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.analytics-card--purple { background: linear-gradient(135deg, #6d28d9, #4c1d95); }
+.analytics-card--orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+.analytics-card--green  { background: linear-gradient(135deg, #10b981, #059669); }
+.analytics-card--blue   { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+/* ── Two-column layout ── */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── Form card ── */
+.admin-form {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid #ede9fe;
+}
+
+.admin-form h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-form h2::before {
+  content: '✏️';
+}
+
+/* ── Fields ── */
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.admin-field span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-field span em {
+  font-style: normal;
+  font-weight: 400;
+  color: #94a3b8;
+  text-transform: none;
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1e293b;
+  background: #fafafa;
+  outline: none;
+  transition: border 0.2s;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus {
+  border-color: #6d28d9;
+  background: white;
+}
+
+/* ── Targeting section ── */
+.admin-targeting {
+  background: #f8f7ff;
+  border: 1.5px solid #ede9fe;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.targeting-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.targeting-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #4c1d95;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.targeting-preview {
+  font-size: 0.8rem;
+  color: #6d28d9;
+  font-weight: 600;
+  background: #ede9fe;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.target-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.target-chip {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.target-chip:hover {
+  border-color: #6d28d9;
+  color: #6d28d9;
+}
+
+.target-chip--active {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: white;
+}
+
+/* ── Submit button ── */
+.admin-submit {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.admin-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(109,40,217,0.35);
+}
+
+/* ── Notice list ── */
+.admin-list {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid #ede9fe;
+}
+
+.admin-list h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-list h2::before {
+  content: '📋';
+}
+
+.admin-notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-notice-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1.5px solid #f1f5f9;
+  transition: all 0.2s;
+}
+
+.admin-notice-row:hover {
+  border-color: #ede9fe;
+  background: #f8f7ff;
+}
+
+.admin-notice-category {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.admin-notice-row--exams .admin-notice-category     { background: #fff7ed; color: #ea580c; }
+.admin-notice-row--events .admin-notice-category    { background: #f0fdf4; color: #16a34a; }
+.admin-notice-row--placements .admin-notice-category{ background: #eff6ff; color: #2563eb; }
+.admin-notice-row--general .admin-notice-category   { background: #fff1f2; color: #e11d48; }
+.admin-notice-row--sports .admin-notice-category    { background: #ecfeff; color: #0891b2; }
+.admin-notice-row--scholarships .admin-notice-category { background: #fffbeb; color: #d97706; }
+.admin-notice-row--lost-found .admin-notice-category { background: #f5f3ff; color: #7c3aed; }
+
+.admin-notice-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 4px 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-notice-audience {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.admin-delete {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1.5px solid #fecdd3;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-delete:hover {
+  background: #e11d48;
+  color: white;
+  border-color: #e11d48;
+}
+
+/* ── Success message ── */
+.admin-success {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  color: #16a34a;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* ── Empty state ── */
+.admin-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .admin-analytics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
