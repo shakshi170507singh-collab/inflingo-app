@@ -4,11 +4,29 @@ require('dotenv').config();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://inflingo-app-new.vercel.app', // your stable production domain
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://inflingo-app-new.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+
+    // allow exact matches from the list above
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // allow any Vercel preview URL matching your project's naming pattern
+    if (/^https:\/\/inflingo-app-.*\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // anything else gets blocked
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 
