@@ -9,7 +9,7 @@ const YEARS_PG = ['1', '2'];
 const PG_COURSES = ['MSc', 'MCA', 'MBA', 'MA'];
 
 function SignupPage() {
-  const { signup } = useAuth();
+  const { signup, adminSignup } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '', email: '', password: '',
@@ -43,23 +43,12 @@ function SignupPage() {
 
     let result;
     if (form.role === 'admin') {
-      // Call admin signup
-      try {
-        const res = await fetch('http://localhost:3000/api/auth/admin-signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            password: form.password,
-            adminKey: form.adminKey
-          })
-        });
-        const data = await res.json();
-        result = res.ok ? { success: true } : { success: false, message: data.error };
-      } catch {
-        result = { success: false, message: 'Something went wrong' };
-      }
+      result = await adminSignup({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        adminKey: form.adminKey,
+      });
     } else {
       result = await signup({
         name: form.name,
@@ -67,14 +56,14 @@ function SignupPage() {
         password: form.password,
         course: form.course,
         department: form.department,
-        year: form.year
+        year: form.year,
       });
     }
 
     setLoading(false);
 
     if (result.success) {
-      navigate('/login', { replace: true });
+      navigate('/', { replace: true });
     } else {
       setError(result.message);
     }

@@ -1,7 +1,7 @@
 /* ── PAGE ───────────────────────────────────────────────── */
 .notice-detail {
   min-height: 100vh;
-  background: #f8f9ff;
+  background: #fff8f0;
   padding: 36px 20px 80px;
   font-family: var(--font-body);
 }
@@ -16,7 +16,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #64748b;
+  color: #92400e;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.875rem;
@@ -27,8 +27,8 @@
 }
 
 .notice-detail .back-link:hover {
-  color: #4f46e5;
-  background: #eef2ff;
+  color: #b91c1c;
+  background: #fff7ed;
   gap: 10px;
 }
 
@@ -37,9 +37,9 @@
   background: #fff;
   border-radius: 16px;
   padding: 36px 40px 40px;
-  border: 1px solid #e8eaf6;
-  border-left: 4px solid #4f46e5;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+  border: 1px solid #fde68a;
+  border-left: 4px solid #b91c1c;
+  box-shadow: 0 2px 12px rgba(127, 29, 29, 0.08);
 }
 
 /* Per-category left border — mirrors CategoryPage header */
@@ -47,6 +47,7 @@
 .notice-detail-card--exams      { border-left-color: #f59e0b; }
 .notice-detail-card--events     { border-left-color: #10b981; }
 .notice-detail-card--placements { border-left-color: #3b82f6; }
+.notice-detail-card--general    { border-left-color: #b91c1c; }
 
 /* ── META ROW ───────────────────────────────────────────── */
 .notice-detail-meta {
@@ -65,8 +66,8 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: capitalize;
-  background: #eef2ff;
-  color: #4f46e5;
+  background: #fef3c7;
+  color: #b45309;
 }
 
 /* Per-category pill colors */
@@ -74,9 +75,11 @@
 .notice-detail-card--exams      .notice-detail-category { background: #ffedd5; color: #ea580c; }
 .notice-detail-card--events     .notice-detail-category { background: #dcfce7; color: #16a34a; }
 .notice-detail-card--placements .notice-detail-category { background: #dbeafe; color: #2563eb; }
+.notice-detail-card--general    .notice-detail-category { background: #fee2e2; color: #b91c1c; }
 
 .notice-detail-date {
-  color: #94a3b8;
+  color: #b45309;
+  opacity: 0.7;
   font-size: 0.83rem;
 }
 
@@ -84,7 +87,8 @@
 .notice-detail-title {
   margin: 0 0 10px;
   font-size: 1.9rem;
-  line-height: 1.25;
+  line-height: 1.3;
+  padding-bottom: 2px;
   color: #1e293b;
   font-family: var(--font-heading);
   letter-spacing: -0.025em;
@@ -92,20 +96,21 @@
 
 /* ── SOURCE ─────────────────────────────────────────────── */
 .notice-detail-source {
-  color: #94a3b8;
+  color: #b45309;
+  opacity: 0.75;
   font-size: 0.875rem;
   margin: 0 0 28px;
 }
 
 .notice-detail-source strong {
-  color: #64748b;
+  color: #92400e;
   font-weight: 600;
 }
 
 /* ── DIVIDER ────────────────────────────────────────────── */
 .notice-detail-divider {
   border: none;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #fde68a;
   margin: 0 0 28px;
 }
 
@@ -125,10 +130,10 @@
   align-items: center;
   gap: 8px;
   padding: 11px 22px;
-  border: 1.5px solid #c7d2fe;
+  border: 1.5px solid #fbbf24;
   border-radius: 99px;
   background: #fff;
-  color: #4f46e5;
+  color: #b45309;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.875rem;
@@ -137,10 +142,10 @@
 }
 
 .notice-detail-save:hover {
-  background: #eef2ff;
-  border-color: #a5b4fc;
+  background: #fff7ed;
+  border-color: #f59e0b;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
 }
 
 .notice-detail-save svg {
@@ -188,11 +193,11 @@
 }
 
 .notice-link {
-  color: #2563eb;
+  color: #b91c1c;
   text-decoration: underline;
   word-break: break-all;
 }
 
 .notice-link:hover {
-  color: #1d4ed8;
+  color: #7f1d1d;
 }

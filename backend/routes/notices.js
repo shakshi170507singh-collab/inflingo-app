@@ -1,23 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/prisma');
-const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 const VALID_CATEGORIES = [
   'academics', 'exams', 'events', 'placements',
   'sports', 'scholarships', 'lost-found', 'general',
 ];
-
-const auth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'No token' });
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Invalid token' });
-  }
-};
 
 router.get('/', auth, async (req, res) => {
   try {
@@ -34,8 +23,8 @@ router.get('/', auth, async (req, res) => {
     });
     res.json(notices);
   } catch (err) {
-    console.error('NOTICES ERROR:', err.message);
-    res.status(500).json({ error: err.message });
+    console.error('NOTICES GET ERROR:', err);
+    res.status(500).json({ error: 'Failed to load notices' });
   }
 });
 
@@ -68,8 +57,8 @@ router.post('/', auth, async (req, res) => {
     });
     res.status(201).json(notice);
   } catch (err) {
-    console.error('POST ERROR:', err.message);
-    res.status(500).json({ error: err.message });
+    console.error('NOTICES POST ERROR:', err);
+    res.status(500).json({ error: 'Failed to publish notice' });
   }
 });
 
@@ -81,8 +70,8 @@ router.delete('/:id', auth, async (req, res) => {
     await prisma.notice.delete({ where: { id: req.params.id } });
     res.json({ message: 'Notice deleted' });
   } catch (err) {
-    console.error('DELETE ERROR:', err.message);
-    res.status(500).json({ error: err.message });
+    console.error('NOTICES DELETE ERROR:', err);
+    res.status(500).json({ error: 'Failed to delete notice' });
   }
 });
 
@@ -94,8 +83,8 @@ router.get('/:id', auth, async (req, res) => {
     if (!notice) return res.status(404).json({ error: 'Not found' });
     res.json(notice);
   } catch (err) {
-    console.error('GET BY ID ERROR:', err.message);
-    res.status(500).json({ error: err.message });
+    console.error('NOTICES GET BY ID ERROR:', err);
+    res.status(500).json({ error: 'Failed to load notice' });
   }
 });
 

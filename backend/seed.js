@@ -2,8 +2,6 @@ const prisma = require('./lib/prisma');
 const bcrypt = require('bcryptjs');
 
 async function main() {
-
-  // Create admin user
   const adminPassword = await bcrypt.hash('admin123', 10);
   const admin = await prisma.user.create({
     data: {
@@ -17,7 +15,6 @@ async function main() {
     }
   });
 
-  // Create a CR user
   const crPassword = await bcrypt.hash('cr123', 10);
   const cr = await prisma.user.create({
     data: {
@@ -31,7 +28,6 @@ async function main() {
     }
   });
 
-  // Create notices
   await prisma.notice.createMany({
     data: [
       {
@@ -46,7 +42,7 @@ async function main() {
       {
         title: 'BSc 2nd Year Exam Schedule',
         content: 'Exams start from July 10. Check timetable.',
-        category: 'academic',
+        category: 'exams',
         targetCourse: 'BSc',
         targetDepartment: 'ALL',
         targetYear: '2',
@@ -55,7 +51,7 @@ async function main() {
       {
         title: 'Placement Drive - TCS',
         content: 'TCS visiting campus on July 15. Register by July 12.',
-        category: 'placement',
+        category: 'placements',
         targetCourse: 'ALL',
         targetDepartment: 'ALL',
         targetYear: 'ALL',
@@ -64,7 +60,7 @@ async function main() {
       {
         title: 'Annual College Fest',
         content: 'Inflingo Fest 2024 on July 20. All students welcome!',
-        category: 'event',
+        category: 'events',
         targetCourse: 'ALL',
         targetDepartment: 'ALL',
         targetYear: 'ALL',

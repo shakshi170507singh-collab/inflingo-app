@@ -4,110 +4,134 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  border-radius: 14px;
-  padding: 18px 14px;
+  border-radius: 16px;
+  padding: 20px 14px;
   cursor: pointer;
-  border: 0.5px solid transparent;
+  border: 1px solid transparent;
   background: none;
   width: 100%;
   min-width: 0;
-  height: 140px;
+  height: 144px;
   gap: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  font-family: var(--font-body);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: 'Inter', var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent 60%);
+  pointer-events: none;
 }
 
 .category-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 12px 28px rgba(127, 29, 29, 0.14);
+  border-color: rgba(251, 191, 36, 0.4);
 }
 
 .category-card-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+
+.category-card:hover .category-card-icon {
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .category-card-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
 }
 
 .category-card-label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   margin-bottom: 4px;
   flex: unset;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1px;
 }
 
 .category-card-count {
   font-size: 11px;
+  font-weight: 600;
   color: #9ca3af;
   background: transparent;
   border: none;
   padding: 0;
-  font-family: var(--font-body);
+  font-family: 'Inter', var(--font-body);
+  position: relative;
+  z-index: 1;
 }
 
 /* ── PER-CATEGORY THEMES ── */
 .category-card--academics {
-  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+  background: linear-gradient(145deg, #f5f3ff, #ede9fe);
   border-color: rgba(99, 102, 241, 0.15);
 }
 .category-card--academics .category-card-label { color: #4f46e5; }
-.category-card--academics .category-card-icon  { background: #6366f1; }
+.category-card--academics .category-card-icon  { background: linear-gradient(135deg, #818cf8, #6366f1); }
 
 .category-card--exams {
-  background: linear-gradient(135deg, #fffbeb, #fef3c7);
-  border-color: rgba(245, 158, 11, 0.15);
+  background: linear-gradient(145deg, #fffbeb, #fef3c7);
+  border-color: rgba(245, 158, 11, 0.2);
 }
-.category-card--exams .category-card-label { color: #d97706; }
-.category-card--exams .category-card-icon  { background: #f59e0b; }
+.category-card--exams .category-card-label { color: #b45309; }
+.category-card--exams .category-card-icon  { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 
 .category-card--events {
-  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  background: linear-gradient(145deg, #f0fdf4, #dcfce7);
   border-color: rgba(34, 197, 94, 0.15);
 }
-.category-card--events .category-card-label { color: #16a34a; }
-.category-card--events .category-card-icon  { background: #10b981; }
+.category-card--events .category-card-label { color: #15803d; }
+.category-card--events .category-card-icon  { background: linear-gradient(135deg, #34d399, #10b981); }
 
 .category-card--placements {
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  background: linear-gradient(145deg, #eff6ff, #dbeafe);
   border-color: rgba(59, 130, 246, 0.15);
 }
 .category-card--placements .category-card-label { color: #1d4ed8; }
-.category-card--placements .category-card-icon  { background: #3b82f6; }
+.category-card--placements .category-card-icon  { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 
 .category-card--general {
-  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+  background: linear-gradient(145deg, #fff1f2, #ffe4e6);
   border-color: rgba(244, 63, 94, 0.15);
 }
-.category-card--general .category-card-label { color: #e11d48; }
-.category-card--general .category-card-icon  { background: #f43f5e; }
+.category-card--general .category-card-label { color: #be123c; }
+.category-card--general .category-card-icon  { background: linear-gradient(135deg, #fb7185, #f43f5e); }
 
 .category-card--sports {
-  background: linear-gradient(135deg, #ecfeff, #cffafe);
+  background: linear-gradient(145deg, #ecfeff, #cffafe);
   border-color: rgba(6, 182, 212, 0.15);
 }
 .category-card--sports .category-card-label { color: #0e7490; }
-.category-card--sports .category-card-icon  { background: #06b6d4; }
+.category-card--sports .category-card-icon  { background: linear-gradient(135deg, #22d3ee, #06b6d4); }
 
 .category-card--scholarships {
-  background: linear-gradient(135deg, #fefce8, #fef9c3);
-  border-color: rgba(234, 179, 8, 0.15);
+  background: linear-gradient(145deg, #fefce8, #fef9c3);
+  border-color: rgba(234, 179, 8, 0.2);
 }
-.category-card--scholarships .category-card-label { color: #a16207; }
-.category-card--scholarships .category-card-icon  { background: #eab308; }
+.category-card--scholarships .category-card-label { color: #854d0e; }
+.category-card--scholarships .category-card-icon  { background: linear-gradient(135deg, #facc15, #eab308); }
 
 .category-card--lost-found {
-  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  background: linear-gradient(145deg, #faf5ff, #f3e8ff);
   border-color: rgba(168, 85, 247, 0.15);
 }
 .category-card--lost-found .category-card-label { color: #7e22ce; }
-.category-card--lost-found .category-card-icon  { background: #a855f7; }
+.category-card--lost-found .category-card-icon  { background: linear-gradient(135deg, #c084fc, #a855f7); }

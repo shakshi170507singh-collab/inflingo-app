@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/prisma');
-const jwt = require('jsonwebtoken');
-
-const auth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'No token' });
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Invalid token' });
-  }
-};
+const auth = require('../middleware/auth');
 
 // Student applies to become CR
 router.post('/request', auth, async (req, res) => {
@@ -27,7 +16,7 @@ router.post('/request', auth, async (req, res) => {
     });
     res.status(201).json({ message: 'CR request submitted' });
   } catch (err) {
-    console.error(err);
+    console.error('CR REQUEST ERROR:', err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
@@ -42,6 +31,7 @@ router.get('/requests', auth, async (req, res) => {
     });
     res.json(requests);
   } catch (err) {
+    console.error('CR REQUESTS GET ERROR:', err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
@@ -60,6 +50,7 @@ router.patch('/approve/:id', auth, async (req, res) => {
     });
     res.json({ message: 'CR approved successfully' });
   } catch (err) {
+    console.error('CR APPROVE ERROR:', err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
@@ -74,6 +65,7 @@ router.patch('/reject/:id', auth, async (req, res) => {
     });
     res.json({ message: 'CR request rejected' });
   } catch (err) {
+    console.error('CR REJECT ERROR:', err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });

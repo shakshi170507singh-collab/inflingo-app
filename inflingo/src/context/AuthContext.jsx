@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
-const API = 'http://localhost:3000/api';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(() => {
@@ -24,8 +24,52 @@ export function AuthProvider({ children }) {
       });
       const data = await res.json();
       if (!res.ok) return { success: false, message: data.error };
+
+      // auto-login after signup
+      const user = {
+        name: data.name || name,
+        email,
+        role: data.role || 'student',
+        course: data.course || course,
+        department: data.department || department,
+        year: data.year || year,
+      };
+      localStorage.setItem('inflingo-token', data.token);
+      localStorage.setItem('inflingo-user', JSON.stringify(user));
+      setCurrentUser(user);
+
       return { success: true };
-    } catch (err) {
+    } catch {
+      return { success: false, message: 'Something went wrong' };
+    }
+  };
+
+  // ADMIN SIGNUP — mirrors signup(), but hits /auth/admin-signup and includes adminKey
+  const adminSignup = async ({ name, email, password, adminKey }) => {
+    try {
+      const res = await fetch(`${API}/auth/admin-signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, adminKey }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { success: false, message: data.error };
+
+      // auto-login after signup
+      const user = {
+        name: data.name || name,
+        email,
+        role: data.role || 'admin',
+        course: data.course,
+        department: data.department,
+        year: data.year,
+      };
+      localStorage.setItem('inflingo-token', data.token);
+      localStorage.setItem('inflingo-user', JSON.stringify(user));
+      setCurrentUser(user);
+
+      return { success: true };
+    } catch {
       return { success: false, message: 'Something went wrong' };
     }
   };
@@ -40,26 +84,19 @@ export function AuthProvider({ children }) {
       const data = await res.json();
       if (!res.ok) return { success: false, message: data.error };
 
-      // Save token and full user info
+      const user = {
+        name: data.name,
+        email,
+        role: data.role,
+        course: data.course,
+        department: data.department,
+        year: data.year,
+      };
       localStorage.setItem('inflingo-token', data.token);
-      localStorage.setItem('inflingo-user', JSON.stringify({
-        name: data.name,
-        email,
-        role: data.role,
-        course: data.course,
-        department: data.department,
-        year: data.year
-      }));
-      setCurrentUser({
-        name: data.name,
-        email,
-        role: data.role,
-        course: data.course,
-        department: data.department,
-        year: data.year
-      });
+      localStorage.setItem('inflingo-user', JSON.stringify(user));
+      setCurrentUser(user);
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, message: 'Something went wrong' };
     }
   };
@@ -80,6 +117,7 @@ export function AuthProvider({ children }) {
         isEventManager: currentUser?.role === 'event_manager',
         canPost: ['admin', 'cr', 'event_manager'].includes(currentUser?.role),
         signup,
+        adminSignup,
         login,
         logout,
       }}

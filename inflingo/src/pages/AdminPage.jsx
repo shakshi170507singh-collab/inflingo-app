@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { useNotices } from '../context/NoticesContext';
@@ -9,12 +10,29 @@ const COURSES = ['BCA', 'B.Sc', 'BBA', 'B.Com', 'B.A', 'M.Sc', 'MCA', 'MBA', 'M.
 const YEARS = ['1', '2', '3'];
 
 const emptyForm = {
-  title: '', content: '',
-  category: 'academics', source: '',
-  targetCourse: 'ALL', targetYear: 'ALL',
+  title: '',
+  content: '',
+  category: 'academics',
+  source: '',
+  targetCourse: 'ALL',
+  targetYear: 'ALL',
 };
 
-function StudentView({ notices, currentUser }) {
+function StudentView({ notices, currentUser, logout }) {
+  const navigate = useNavigate();
+
+  const counts = CATEGORIES.reduce((acc, c) => {
+    acc[c.key] = notices.filter((n) => n.category === c.key).length;
+    return acc;
+  }, {});
+
+  const analyticsCards = [
+    { label: 'Total',      value: notices.length,        mod: 'purple' },
+    { label: 'Exams',      value: counts.exams      ?? 0, mod: 'orange' },
+    { label: 'Events',     value: counts.events     ?? 0, mod: 'green'  },
+    { label: 'Placements', value: counts.placements ?? 0, mod: 'blue'   },
+  ];
+
   return (
     <main className="admin-page">
       <div className="admin-header">
@@ -22,22 +40,38 @@ function StudentView({ notices, currentUser }) {
           <h1>My Notices</h1>
           <p className="admin-subtitle">Welcome, {currentUser?.name || currentUser?.email}</p>
         </div>
+        <button className="admin-logout" onClick={logout}>Log out</button>
       </div>
 
-      <div className="student-notices">
+      <div className="admin-analytics">
+        {analyticsCards.map((a) => (
+          <div key={a.label} className={`analytics-card analytics-card--${a.mod}`}>
+            <span className="label">{a.label}</span>
+            <span className="value">{a.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="admin-list" style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <h2>All notices ({notices.length})</h2>
         {notices.length === 0 ? (
           <div className="admin-empty">No notices posted yet</div>
         ) : (
           <ul className="admin-notice-list">
             {notices.map((n) => (
-              <li key={n.id} className={`admin-notice-row admin-notice-row--${n.category}`}>
-                <div>
+              <li
+                key={n.id}
+                className={`admin-notice-row admin-notice-row--${n.category}`}
+                onClick={() => navigate(`/notice/${n.id}`)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <span className="admin-notice-category">{n.category}</span>
                   <p className="admin-notice-title">{n.title}</p>
+                  <p className="admin-notice-date">
+                    {new Date(n.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
-                <span className="admin-notice-date">
-                  {new Date(n.createdAt).toLocaleDateString()}
-                </span>
               </li>
             ))}
           </ul>
@@ -47,10 +81,11 @@ function StudentView({ notices, currentUser }) {
   );
 }
 
-function AdminView({ notices, currentUser, logout }) {
+function AdminView({ notices, loading, error, currentUser, logout }) {
   const { addNotice, deleteNotice } = useNotices();
+  const navigate = useNavigate();
   const [form, setForm] = useState(emptyForm);
-  const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) =>
@@ -93,10 +128,10 @@ function AdminView({ notices, currentUser, logout }) {
   }, {});
 
   const analyticsCards = [
-    { label: 'Total',      value: notices.length,        mod: 'purple' },
-    { label: 'Exams',      value: counts.exams     ?? 0, mod: 'orange' },
-    { label: 'Events',     value: counts.events    ?? 0, mod: 'green'  },
-    { label: 'Placements', value: counts.placements ?? 0, mod: 'blue'  },
+    { label: 'Total',      value: notices.length,         mod: 'purple' },
+    { label: 'Exams',      value: counts.exams      ?? 0, mod: 'orange' },
+    { label: 'Events',     value: counts.events     ?? 0, mod: 'green'  },
+    { label: 'Placements', value: counts.placements  ?? 0, mod: 'blue'  },
   ];
 
   return (
@@ -121,13 +156,16 @@ function AdminView({ notices, currentUser, logout }) {
       </div>
 
       <div className="admin-layout">
-
         {/* Post form */}
         <form className="admin-form" onSubmit={handleSubmit}>
           <h2>Post a new notice</h2>
 
-          {status === 'success' && <div className="admin-success">✅ Notice published!</div>}
-          {status === 'error' && <div className="admin-error">❌ {errorMsg}</div>}
+          {status === 'success' && (
+            <div className="admin-success">✅ Notice published!</div>
+          )}
+          {status === 'error' && (
+            <div className="admin-error">❌ {errorMsg}</div>
+          )}
 
           <label className="admin-field">
             <span>Title</span>
@@ -194,13 +232,24 @@ function AdminView({ notices, currentUser, logout }) {
         {/* Notice list */}
         <div className="admin-list">
           <h2>All notices ({notices.length})</h2>
-          {notices.length === 0 ? (
+
+          {loading ? (
+            <div className="admin-empty">Loading notices...</div>
+          ) : error ? (
+            <div className="admin-error">⚠️ {error}</div>
+          ) : notices.length === 0 ? (
             <div className="admin-empty">No notices posted yet</div>
           ) : (
             <ul className="admin-notice-list">
               {notices.map((n) => (
-                <li key={n.id} className={`admin-notice-row admin-notice-row--${n.category}`}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
+                <li
+                  key={n.id}
+                  className={`admin-notice-row admin-notice-row--${n.category}`}
+                >
+                  <div
+                    style={{ flex: 1, minWidth: 0, cursor: 'pointer' }}
+                    onClick={() => navigate(`/notice/${n.id}`)}
+                  >
                     <span className="admin-notice-category">{n.category}</span>
                     <p className="admin-notice-title">{n.title}</p>
                     <p className="admin-notice-audience">
@@ -215,7 +264,10 @@ function AdminView({ notices, currentUser, logout }) {
                   <button
                     type="button"
                     className="admin-delete"
-                    onClick={() => deleteNotice(n.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteNotice(n.id);
+                    }}
                   >
                     Delete
                   </button>
@@ -224,7 +276,6 @@ function AdminView({ notices, currentUser, logout }) {
             </ul>
           )}
         </div>
-
       </div>
     </main>
   );
@@ -232,7 +283,7 @@ function AdminView({ notices, currentUser, logout }) {
 
 function AdminPage() {
   const { currentUser, logout } = useAuth();
-  const { notices } = useNotices();
+  const { notices, loading, error } = useNotices();
 
   const isAdmin = ['admin', 'cr', 'event_manager'].includes(currentUser?.role);
 
@@ -240,8 +291,8 @@ function AdminPage() {
     <>
       <Navbar />
       {isAdmin
-        ? <AdminView notices={notices} currentUser={currentUser} logout={logout} />
-        : <StudentView notices={notices} currentUser={currentUser} />
+        ? <AdminView notices={notices} loading={loading} error={error} currentUser={currentUser} logout={logout} />
+        : <StudentView notices={notices} currentUser={currentUser} logout={logout} />
       }
     </>
   );
