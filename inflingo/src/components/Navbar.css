@@ -211,3 +211,23 @@
   .navbar-cta { display: none; }
   .navbar-toggle { display: flex; }
 }
+
+/* ── MOBILE AUTH ACTION (inside dropdown) ────────── */
+.navbar-link--mobile-cta {
+  display: none; /* hidden on desktop, since .navbar-actions already shows it there */
+}
+
+@media (max-width: 760px) {
+  .navbar-link--mobile-cta {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    color: #fff !important;
+    background: var(--nav-cta-bg);
+    border: none;
+    margin: 10px 16px;
+    padding: 10px;
+    border-radius: 99px;
+    cursor: pointer;
+  }
+}

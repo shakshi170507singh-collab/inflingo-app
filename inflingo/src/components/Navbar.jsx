@@ -42,6 +42,17 @@ function Navbar(){
           {isAuthenticated && (
             <NavLink to="/admin" className={linkClass} onClick={() => setIsOpen(false)}>Admin</NavLink>
           )}
+
+          {/* Mobile-only auth action, shown inside the dropdown */}
+          {isAuthenticated ? (
+            <button className="navbar-link navbar-link--mobile-cta" onClick={handleLogout}>
+              Log out
+            </button>
+          ) : (
+            <NavLink to="/login" className="navbar-link navbar-link--mobile-cta" onClick={() => setIsOpen(false)}>
+              Sign In
+            </NavLink>
+          )}
         </nav>
 
         <div className="navbar-actions">
