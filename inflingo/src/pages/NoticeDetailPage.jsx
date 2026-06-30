@@ -47,11 +47,16 @@ function NoticeDetailPage() {
             <p className="notice-detail-body">
   {notice.content.split(/\s+/).map((word, i) => {
     if (word.startsWith('http://') || word.startsWith('https://')) {
+      // Strip trailing punctuation (., comma, ), ], !, ?) that isn't part of the actual URL
+      const trailingPunctMatch = word.match(/[).,!?\]]+$/);
+      const trailing = trailingPunctMatch ? trailingPunctMatch[0] : '';
+      const cleanUrl = trailing ? word.slice(0, -trailing.length) : word;
+
       return (
         <span key={i}>
-          <a href={word} target="_blank" rel="noopener noreferrer" className="notice-link">
-            {word}
-          </a>{' '}
+          <a href={cleanUrl} target="_blank" rel="noopener noreferrer" className="notice-link">
+            {cleanUrl}
+          </a>{trailing}{' '}
         </span>
       );
     }
