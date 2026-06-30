@@ -14,8 +14,8 @@ const emptyForm = {
   content: '',
   category: 'academics',
   source: '',
-  targetCourse: 'ALL',
-  targetYear: 'ALL',
+  targetCourses: [],
+  targetYears: [],
 };
 
 function StudentView({ notices, currentUser, logout }) {
@@ -91,6 +91,30 @@ function AdminView({ notices, loading, error, currentUser, logout }) {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  const toggleCourse = (course) => {
+    setForm((prev) => {
+      const has = prev.targetCourses.includes(course);
+      return {
+        ...prev,
+        targetCourses: has
+          ? prev.targetCourses.filter((c) => c !== course)
+          : [...prev.targetCourses, course],
+      };
+    });
+  };
+
+  const toggleYear = (year) => {
+    setForm((prev) => {
+      const has = prev.targetYears.includes(year);
+      return {
+        ...prev,
+        targetYears: has
+          ? prev.targetYears.filter((y) => y !== year)
+          : [...prev.targetYears, year],
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim() || !form.content.trim()) {
@@ -105,9 +129,9 @@ function AdminView({ notices, loading, error, currentUser, logout }) {
         title: form.title,
         content: form.content,
         category: form.category,
-        targetCourse: form.targetCourse,
+        targetCourses: form.targetCourses.length > 0 ? form.targetCourses : ['ALL'],
         targetDepartment: 'ALL',
-        targetYear: form.targetYear,
+        targetYears: form.targetYears.length > 0 ? form.targetYears : ['ALL'],
       });
       if (result?.id) {
         setForm(emptyForm);
@@ -198,26 +222,46 @@ function AdminView({ notices, loading, error, currentUser, logout }) {
             />
           </label>
 
-          <div className="admin-row">
-            <label className="admin-field">
-              <span>Target course</span>
-              <select name="targetCourse" value={form.targetCourse} onChange={handleChange}>
-                <option value="ALL">All courses</option>
-                {COURSES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </label>
+          <div className="admin-targeting">
+            <div className="targeting-header">
+              <span className="targeting-title">Target courses</span>
+              <span className="targeting-preview">
+                {form.targetCourses.length > 0 ? form.targetCourses.join(', ') : 'Everyone'}
+              </span>
+            </div>
+            <div className="target-chips">
+              {COURSES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`target-chip ${form.targetCourses.includes(c) ? 'target-chip--active' : ''}`}
+                  onClick={() => toggleCourse(c)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <label className="admin-field">
-              <span>Target year</span>
-              <select name="targetYear" value={form.targetYear} onChange={handleChange}>
-                <option value="ALL">All years</option>
-                {YEARS.map((y) => (
-                  <option key={y} value={y}>Year {y}</option>
-                ))}
-              </select>
-            </label>
+          <div className="admin-targeting">
+            <div className="targeting-header">
+              <span className="targeting-title">Target years</span>
+              <span className="targeting-preview">
+                {form.targetYears.length > 0 ? `Year ${form.targetYears.join(', ')}` : 'Everyone'}
+              </span>
+            </div>
+            <div className="target-chips">
+              {YEARS.map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  className={`target-chip ${form.targetYears.includes(y) ? 'target-chip--active' : ''}`}
+                  onClick={() => toggleYear(y)}
+                >
+                  Year {y}
+                </button>
+              ))}
+            </div>
           </div>
 
           <button
@@ -253,9 +297,9 @@ function AdminView({ notices, loading, error, currentUser, logout }) {
                     <span className="admin-notice-category">{n.category}</span>
                     <p className="admin-notice-title">{n.title}</p>
                     <p className="admin-notice-audience">
-                      {n.targetCourse !== 'ALL'
-                        ? `🎯 ${n.targetCourse}${n.targetYear !== 'ALL' ? ` · Year ${n.targetYear}` : ''}`
-                        : '👥 Everyone'}
+                      {n.targetCourses?.includes('ALL')
+                        ? '👥 Everyone'
+                        : `🎯 ${n.targetCourses?.join(', ')}${n.targetYears && !n.targetYears.includes('ALL') ? ` · Year ${n.targetYears.join(', ')}` : ''}`}
                     </p>
                     <p className="admin-notice-date">
                       {new Date(n.createdAt).toLocaleDateString()}

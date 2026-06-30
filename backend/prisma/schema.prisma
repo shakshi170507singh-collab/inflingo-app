@@ -26,9 +26,9 @@ model Notice {
   title            String
   content          String
   category         String
-  targetCourse     String   @default("ALL")
+  targetCourses    String[] @default(["ALL"])
   targetDepartment String   @default("ALL")
-  targetYear       String   @default("ALL")
+  targetYears      String[] @default(["ALL"])
   authorId         String   @db.ObjectId
   author           User     @relation(fields: [authorId], references: [id])
   createdAt        DateTime @default(now())
