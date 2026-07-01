@@ -14,9 +14,18 @@ router.get('/', auth, async (req, res) => {
     const notices = await prisma.notice.findMany({
       where: {
         OR: [
-          { targetCourse: 'ALL' },
-          { targetCourse: course, targetYear: 'ALL' },
-          { targetCourse: course, targetYear: String(year) },
+          { targetCourses: { has: 'ALL' } },
+          {
+            AND: [
+              { targetCourses: { has: course } },
+              {
+                OR: [
+                  { targetYears: { has: 'ALL' } },
+                  { targetYears: { has: String(year) } },
+                ],
+              },
+            ],
+          },
         ],
       },
       orderBy: { createdAt: 'desc' },
@@ -34,7 +43,7 @@ router.post('/', auth, async (req, res) => {
     return res.status(403).json({ error: 'Not authorized' });
   }
 
-  const { title, content, category, targetCourse, targetDepartment, targetYear } = req.body;
+  const { title, content, category, targetCourses, targetDepartment, targetYears } = req.body;
 
   if (!title || !content || !category) {
     return res.status(400).json({ error: 'title, content, and category are required' });
@@ -49,9 +58,9 @@ router.post('/', auth, async (req, res) => {
         title,
         content,
         category,
-        targetCourse: targetCourse || 'ALL',
+        targetCourses: Array.isArray(targetCourses) && targetCourses.length > 0 ? targetCourses : ['ALL'],
         targetDepartment: targetDepartment || 'ALL',
-        targetYear: targetYear || 'ALL',
+        targetYears: Array.isArray(targetYears) && targetYears.length > 0 ? targetYears : ['ALL'],
         authorId: req.user.userId,
       },
     });
